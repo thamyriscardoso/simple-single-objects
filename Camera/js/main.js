@@ -1,79 +1,79 @@
-class Camera {
-    constructor(marca, modelo){
-        this.albumFotos = 0;
-        this.albumVideos = 0;
-        this.albumExcluidos = 0;
-        this.flash = false;
-        this._marca = marca;
-        this._modelo = modelo;
-    }
-    get modelo(){
-        return this._modelo;
-    }
-    get marca(){
-        return this._marca;
-    }
-    novaFoto () {
-        this.albumFotos++;
-    }
-    novoVideo () {
-        this.albumVideos++;
-    }
-    sequenciaDeFotos (numero) {
-        if(numero <= 100){
-            this.albumFotos += numero;
-        } 
-        else{
-            if(numero > 100){
-                 throw "Você ultrapassou o limite de fotos, a operação foi cancelada.";
-            }
-        }
-    }
-    ligaDesligaFlash () {
-        if(this.flash === false){
-            this.flash = true;
-            return "Flash ligado"
-        }
-        else{
-            this.flash = false;
-            return "Flash desligado"
-        }
-    }
-    excluirFotos (numero) {
-        if(numero <= this.albumFotos){
-            this.albumFotos -= numero;
-            this.albumExcluidos += numero;
-        } 
-        else{
-            if(this.albumFotos === 1){
-                throw "Você tem apenas 1 foto para excluir.";
-            } 
-            else{
-                throw "Você tem apenas " + this.albumFotos + " fotos para excluir.";
-            }
-        }
-    }
-    excluirVideos (numero) {
-        if(numero <= this.albumVideos){
-            this.albumVideos -= numero;
-            this.albumExcluidos +=numero;
-        } 
-        else{
-            if(this.albumVideos===1){
-                throw "Você tem apenas 1 vídeo para excluir.";
-            } 
-            else{
-                throw "Você tem apenas " + this.albumVideos + " vídeos para excluir.";
-            }
-        }
-    }
-    Fotos () {
-        return this.albumFotos;
-    }
-    Videos () {
-        return this.albumVideos;
-    }
-    Excluidos () {
-        return this.albumExcluidos;
-    }
+import {Camera} from './camera.class.js';
+
+const camera1 = new Camera('Canon', 'H300');
+// console.log(camera1.marca === 'Canon');
+console.log(camera1.modelo === 'H300');
+// camera1.modelo = 'H560'; // não deve fazer efeito;
+console.log(camera1.modelo === 'H300');
+// camera1.marca = 'Aro'; // ('não deve fazer efeito')
+console.log(camera1.marca === 'Canon');
+camera1.novaFoto();
+camera1.novaFoto();
+console.log(camera1.fotos() === 2); // true
+camera1.novoVideo();
+camera1.novoVideo();
+console.log(camera1.videos() === 2); // true
+
+console.log(camera1.ligaDesligaFlash());
+
+try {
+    console.log(camera1.excluirFotos(3));
+    console.log(false); // essa linha não deve ser alcançada
+} catch (e) {
+    console.log(e === 'Você tem apenas 2 fotos para excluir.'); // true
 }
+
+camera1.excluirFotos(1);
+console.log(camera1.fotos() === 1); // true;
+console.log(camera1.excluidos() === 1);
+
+camera1.sequenciaDeFotos(50);
+console.log(camera1.fotos() === 51); // true;
+
+try {
+    console.log(camera1.sequenciaDeFotos(110));
+    console.log(false); // essa linha não deve ser alcançada
+} catch (e) {
+    console.log(
+        e === 'Você ultrapassou o limite de fotos, a operação foi cancelada.');
+    // true
+}
+
+camera1.excluirFotos(10);
+console.log(camera1.fotos() === 41);
+console.log(camera1.excluidos() === 11);
+
+
+camera1.excluirVideos(2);
+console.log(camera1.videos()=== 0);
+
+camera1.novoVideo();
+console.log(camera1.videos() === 1);
+console.log(camera1.ligaDesligaFlash());
+
+const camera2 = new Camera('Nikon', 'B500');
+// console.log(camera2.modelo === 'B500');
+// camera1.modelo = 'H560'; // não deve fazer efeito;
+// console.log(camera2.modelo === 'B500');
+// console.log(camera2.marca === 'Nikon');
+// camera1.marca = 'Aro'; // não deve fazer efeito
+// console.log(camera2.marca === 'Nikon');
+camera2.sequenciaDeFotos(32);
+console.log(camera2.fotos() === 32);
+console.log(camera1.ligaDesligaFlash());
+
+camera2.novoVideo();
+camera2.novoVideo();
+camera2.novoVideo();
+camera2.novoVideo();
+camera2.novoVideo();
+camera2.novoVideo();
+camera2.excluirVideos(2);
+console.log(camera2.videos() === 4);
+
+camera2.novaFoto();
+camera2.novaFoto();
+camera2.novaFoto();
+camera2.novaFoto();
+console.log(camera2.fotos() === 36);
+
